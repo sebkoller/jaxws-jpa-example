@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        maven {
+            //needed for com.github.nikit.cpp.helpers:deployer
+            url 'https://dl.bintray.com/nikit007/mvn-repo/'
+        }
+    }
+}
+
+plugins {
+    id 'java'
+    id 'war'
+    id 'com.github.nikit.cpp.wildfly.deploy' version '1.0.8'
+}
+
+group 'at.technikum'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+war {
+    archiveName 'movies.war'
+}
+
+dependencies {
+    compileOnly group: 'javax', name: 'javaee-api', version: '7.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+//task deploy(dependsOn: war) {
+//    copy {
+//        def WILDFLY_HOME = "${System.env.JBOSS_HOME}/standalone/deployments/"
+//
+//        from war.archivePath
+//        into WILDFLY_HOME
+//
+//        logger.quiet("Deploying war file to ${WILDFLY_HOME}")
+//    }
+//}
+
+//task deploy(dependsOn: war) {
+//    undeployLocal().execute()
+//    deployLocal().execute()
+//}
+
+deployConfig {
+    deployFile = "scripts/deploy" // list of war files to deploy
+    boxes = [
+            'Local': [
+                    wildfly: new helpers.Server(username:'admin', password:'admin', hostname:'localhost')
+            ]
+    ]
+}
+
+war << {
+    undeployLocal().execute()
+    deployLocal().execute()
+}
