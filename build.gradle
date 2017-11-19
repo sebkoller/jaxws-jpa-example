@@ -33,32 +33,12 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-//task deploy(dependsOn: war) {
-//    copy {
-//        def WILDFLY_HOME = "${System.env.JBOSS_HOME}/standalone/deployments/"
-//
-//        from war.archivePath
-//        into WILDFLY_HOME
-//
-//        logger.quiet("Deploying war file to ${WILDFLY_HOME}")
-//    }
-//}
-
-//task deploy(dependsOn: war) {
-//    undeployLocal().execute()
-//    deployLocal().execute()
-//}
-
+// hint: `gradle redeployLocal` will invoke an undeploy followed by a deploy
 deployConfig {
     deployFile = "scripts/deploy" // list of war files to deploy
     boxes = [
             'Local': [
-                    wildfly: new helpers.Server(username:'admin', password:'admin', hostname:'localhost')
+                    wildfly: new helpers.Server(username: 'admin', password: 'admin', hostname: 'localhost')
             ]
     ]
-}
-
-war << {
-    undeployLocal().execute()
-    deployLocal().execute()
 }
