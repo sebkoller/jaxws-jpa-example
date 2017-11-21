@@ -1,6 +1,8 @@
-package Model;
+package model;
 
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,15 +14,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Movie.selectAll",
+        query = "select m from Movie m"),
+    @NamedQuery(name = "Movie.findByTitleContainingIgnoreCase",
+        query = "select m from Movie m where lower(m.title) like lower(concat('%',:title,'%'))")
+})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "movie")
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlAttribute
     private long id;
 
-    private static String title;
+    @Column(nullable = false)
+    private String title;
 
     private String description;
 
@@ -31,12 +51,14 @@ public class Movie {
 
     private int releaseYear;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn
     private Studio studio;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "movie_cast")
+    @XmlElementWrapper(name = "actors")
+    @XmlElement(name = "actor")
     private Set<Actor> actors;
 
     public long getId() {
@@ -47,12 +69,12 @@ public class Movie {
         this.id = id;
     }
 
-    public static String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public static void setTitle(String title) {
-        Movie.title = title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -101,5 +123,19 @@ public class Movie {
 
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", description='" + description + '\'' +
+            ", genre=" + genre +
+            ", length=" + length +
+            ", releaseYear=" + releaseYear +
+            ", studio=" + studio +
+            ", actors=" + actors +
+            '}';
     }
 }
