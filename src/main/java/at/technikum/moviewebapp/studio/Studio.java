@@ -1,9 +1,9 @@
-package model;
+package at.technikum.moviewebapp.studio;
 
+import at.technikum.moviewebapp.movie.Movie;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,21 +22,23 @@ public class Studio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @XmlAttribute
+    @XmlTransient
     private long id;
 
+    @XmlAttribute
     @Column(nullable = false)
     private String name;
 
+    @XmlAttribute(name = "countrycode")
     private String countryCode;
 
-    private String postcode;
+    @XmlAttribute(name = "postcode")
+    private String postCode;
 
-    @OneToMany(
-        mappedBy = "studio",
-        fetch = FetchType.LAZY
-    )
     @XmlTransient
+    @OneToMany(
+        mappedBy = "studio"//,
+    )
     private Set<Movie> movies;
 
     public long getId() {
@@ -63,12 +65,12 @@ public class Studio {
         this.countryCode = countryCode;
     }
 
-    public String getPostcode() {
-        return postcode;
+    public String getPostCode() {
+        return postCode;
     }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
+    public void setPostCode(String postcode) {
+        this.postCode = postcode;
     }
 
     public Set<Movie> getMovies() {
@@ -81,12 +83,13 @@ public class Studio {
 
     @Override
     public String toString() {
-        return "Studio{" +
+        return "studio{" +
             "id=" + id +
             ", name='" + name + '\'' +
             ", countryCode='" + countryCode + '\'' +
-            ", postcode='" + postcode + '\'' +
+            ", postcode='" + postCode + '\'' +
             ", movies=" + movies +
             '}';
     }
+
 }

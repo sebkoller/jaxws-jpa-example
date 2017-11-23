@@ -1,9 +1,10 @@
-import model.Movie;
+package at.technikum.moviewebapp.movie;
+
 import java.util.List;
 import javax.inject.Inject;
 import javax.jws.WebService;
 
-@WebService(endpointInterface = "MovieWebService",
+@WebService(endpointInterface = "at.technikum.moviewebapp.movie.MovieWebService",
     serviceName = "MovieWebService",
     portName = "MovieWebServicePort")
 public class MovieWebServiceImpl implements MovieWebService {
@@ -22,7 +23,7 @@ public class MovieWebServiceImpl implements MovieWebService {
     }
 
     @Override
-    public boolean insertMovie(String xml) {
-        return movieService.insertMovie(xml);
+    public void insertMovie(MovieList movies) {
+        movieService.insertMovies(movies.getList());
     }
 }

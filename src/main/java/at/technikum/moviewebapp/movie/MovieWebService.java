@@ -1,7 +1,8 @@
+package at.technikum.moviewebapp.movie;
+
 import javax.jws.WebParam;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import model.Movie;
 import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -20,5 +21,5 @@ public interface MovieWebService {
     List<Movie> findByTitle(@WebParam(name = "keyword") String keyword);
 
     @WebMethod
-    boolean insertMovie(String xml);
+    void insertMovie(@WebParam(name = "movies") @XmlElement(required = true) MovieList movies);
 }

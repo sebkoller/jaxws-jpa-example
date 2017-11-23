@@ -1,4 +1,5 @@
-import model.Movie;
+package at.technikum.moviewebapp.movie;
+
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

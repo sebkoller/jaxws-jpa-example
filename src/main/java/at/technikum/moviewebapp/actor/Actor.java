@@ -1,5 +1,7 @@
-package model;
+package at.technikum.moviewebapp.actor;
 
+import at.technikum.moviewebapp.gender.Gender;
+import at.technikum.moviewebapp.movie.Movie;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.persistence.Column;
@@ -18,7 +20,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import util.LocalDateAdapter;
+import at.technikum.moviewebapp.util.LocalDateAdapter;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"firstname", "lastname", "birthdate"}))
@@ -27,26 +29,30 @@ public class Actor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @XmlAttribute
+    @XmlTransient
     private long id;
 
+    @XmlAttribute(name = "firstname")
     @Column(nullable = false)
-    private String firstname;
+    private String firstName;
 
+    @XmlAttribute(name = "lastname")
     @Column(nullable = false)
-    private String lastname;
+    private String lastName;
 
+    @XmlAttribute(name = "sex")
     @Enumerated(EnumType.STRING)
-    private Gender sex;
+    private Gender gender;
 
+    @XmlAttribute
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate birthdate;
 
+    @XmlTransient
     @ManyToMany(
         fetch = FetchType.EAGER,
         mappedBy = "actors"
     )
-    @XmlTransient
     private Set<Movie> movies;
 
     public long getId() {
@@ -57,28 +63,28 @@ public class Actor {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
     }
 
-    public Gender getSex() {
-        return sex;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setSex(Gender sex) {
-        this.sex = sex;
+    public void setGender(Gender sex) {
+        this.gender = sex;
     }
 
     public LocalDate getBirthdate() {
@@ -97,13 +103,17 @@ public class Actor {
         this.movies = movies;
     }
 
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     @Override
     public String toString() {
-        return "Actor{" +
+        return "actor{" +
             "id=" + id +
-            ", firstname='" + firstname + '\'' +
-            ", lastname='" + lastname + '\'' +
-            ", sex=" + sex +
+            ", firstname='" + firstName + '\'' +
+            ", lastname='" + lastName + '\'' +
+            ", sex=" + gender +
             ", birthdate=" + birthdate +
             ", movies=" + movies +
             '}';

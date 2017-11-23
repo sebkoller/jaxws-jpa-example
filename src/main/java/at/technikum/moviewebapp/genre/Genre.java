@@ -1,4 +1,4 @@
-package model;
+package at.technikum.moviewebapp.genre;
 
 public enum Genre {
     ACTION,

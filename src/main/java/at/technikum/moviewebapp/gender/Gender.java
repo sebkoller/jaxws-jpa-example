@@ -1,4 +1,4 @@
-package model;
+package at.technikum.moviewebapp.gender;
 
 public enum Gender {
     MALE,

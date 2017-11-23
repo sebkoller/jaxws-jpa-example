@@ -1,12 +1,15 @@
-package model;
+package at.technikum.moviewebapp.movie;
 
+import at.technikum.moviewebapp.actor.Actor;
+import at.technikum.moviewebapp.genre.Genre;
+import at.technikum.moviewebapp.studio.Studio;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,52 +17,54 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(name = "Movie.selectAll",
-        query = "select m from Movie m"),
-    @NamedQuery(name = "Movie.findByTitleContainingIgnoreCase",
-        query = "select m from Movie m where lower(m.title) like lower(concat('%',:title,'%'))")
-})
 @XmlAccessorType(XmlAccessType.FIELD)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "releaseyear", "studio_id"}))
 @XmlRootElement(name = "movie")
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @XmlAttribute
+    @XmlTransient
     private long id;
 
+    @XmlAttribute
     @Column(nullable = false)
     private String title;
 
+    @XmlAttribute
+    @Column(columnDefinition = "text")
     private String description;
 
+    @XmlAttribute
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
+    @XmlAttribute
     private int length;
 
+    @XmlAttribute(name = "releaseyear")
     private int releaseYear;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn
     private Studio studio;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "movie_cast")
     @XmlElementWrapper(name = "actors")
     @XmlElement(name = "actor")
-    private Set<Actor> actors;
+    @ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "movie_cast")
+    private List<Actor> actors;
 
     public long getId() {
         return id;
@@ -117,17 +122,17 @@ public class Movie {
         this.studio = studio;
     }
 
-    public Set<Actor> getActors() {
+    public List<Actor> getActors() {
         return actors;
     }
 
-    public void setActors(Set<Actor> actors) {
+    public void setActors(List<Actor> actors) {
         this.actors = actors;
     }
 
     @Override
     public String toString() {
-        return "Movie{" +
+        return "movie{" +
             "id=" + id +
             ", title='" + title + '\'' +
             ", description='" + description + '\'' +
