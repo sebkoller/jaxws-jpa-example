@@ -4,16 +4,13 @@ import at.technikum.moviewebapp.actor.Actor;
 import at.technikum.moviewebapp.actor.ActorService;
 import at.technikum.moviewebapp.studio.Studio;
 import at.technikum.moviewebapp.studio.StudioService;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 
 @Stateless
 public class MovieServiceImpl implements MovieService {

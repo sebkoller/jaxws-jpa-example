@@ -2,13 +2,13 @@ package at.technikum.moviewebapp.actor;
 
 import at.technikum.moviewebapp.gender.Gender;
 import at.technikum.moviewebapp.movie.Movie;
+import at.technikum.moviewebapp.util.LocalDateAdapter;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import at.technikum.moviewebapp.util.LocalDateAdapter;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"first_name", "last_name", "birthdate"}))
