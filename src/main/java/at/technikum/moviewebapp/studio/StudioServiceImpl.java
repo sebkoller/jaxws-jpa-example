@@ -15,10 +15,10 @@ public class StudioServiceImpl implements StudioService {
         return em.createQuery("select s from Studio s " +
             "where s.name = :name " +
             "and s.countryCode = :countryCode " +
-            "and s.postCode = :postcode", Studio.class)
+            "and s.postCode = :postCode", Studio.class)
             .setParameter("name", studio.getName())
             .setParameter("countryCode", studio.getCountryCode())
-            .setParameter("postcode", studio.getPostCode())
+            .setParameter("postCode", studio.getPostCode())
             .getResultList()
             .stream()
             .findFirst();
