@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "releaseyear", "studio_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "release_year", "studio_id"}))
 @XmlRootElement(name = "movie")
 public class Movie {
 
@@ -38,32 +38,33 @@ public class Movie {
     @XmlTransient
     private long id;
 
-    @XmlAttribute
     @Column(nullable = false)
+    @XmlAttribute
     private String title;
 
-    @XmlAttribute
     @Column(columnDefinition = "text")
+    @XmlAttribute
     private String description;
 
-    @XmlAttribute
     @Enumerated(EnumType.STRING)
+    @XmlAttribute
     private Genre genre;
 
     @XmlAttribute
     private int length;
 
+    @Column(name = "release_year", nullable = false)
     @XmlAttribute(name = "releaseyear")
     private int releaseYear;
 
-    @ManyToOne//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn
+    @ManyToOne
+    @JoinColumn(name = "studio_id")
     private Studio studio;
 
+    @ManyToMany
+    @JoinTable(name = "movie_cast")
     @XmlElementWrapper(name = "actors")
     @XmlElement(name = "actor")
-    @ManyToMany//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "movie_cast")
     private List<Actor> actors;
 
     public long getId() {

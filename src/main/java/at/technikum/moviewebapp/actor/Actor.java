@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import at.technikum.moviewebapp.util.LocalDateAdapter;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"firstname", "lastname", "birthdate"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"first_name", "last_name", "birthdate"}))
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Actor {
 
@@ -32,27 +32,26 @@ public class Actor {
     @XmlTransient
     private long id;
 
+    @Column(name = "first_name", nullable = false)
     @XmlAttribute(name = "firstname")
-    @Column(nullable = false)
     private String firstName;
 
+    @Column(name = "last_name", nullable = false)
     @XmlAttribute(name = "lastname")
-    @Column(nullable = false)
     private String lastName;
 
-    @XmlAttribute(name = "sex")
     @Enumerated(EnumType.STRING)
+    @XmlAttribute(name = "sex")
     private Gender gender;
 
     @XmlAttribute
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate birthdate;
 
-    @XmlTransient
     @ManyToMany(
-        fetch = FetchType.EAGER,
         mappedBy = "actors"
     )
+    @XmlTransient
     private Set<Movie> movies;
 
     public long getId() {

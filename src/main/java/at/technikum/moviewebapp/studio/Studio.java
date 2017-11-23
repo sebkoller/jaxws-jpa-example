@@ -10,13 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "countryCode", "postcode"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "country_code", "post_code"}))
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Studio {
 
@@ -25,20 +26,23 @@ public class Studio {
     @XmlTransient
     private long id;
 
-    @XmlAttribute
     @Column(nullable = false)
+    @XmlAttribute
     private String name;
 
+    @Column(name = "country_code")
+    @Pattern(regexp = "[A-Z]{2}")
     @XmlAttribute(name = "countrycode")
     private String countryCode;
 
+    @Column(name = "post_code")
     @XmlAttribute(name = "postcode")
     private String postCode;
 
-    @XmlTransient
     @OneToMany(
-        mappedBy = "studio"//,
+        mappedBy = "studio"
     )
+    @XmlTransient
     private Set<Movie> movies;
 
     public long getId() {
