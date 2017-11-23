@@ -6,6 +6,7 @@ import at.technikum.moviewebapp.studio.Studio;
 import at.technikum.moviewebapp.studio.StudioService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -50,21 +51,16 @@ public class MovieServiceImpl implements MovieService {
             final Studio studio = studioService
                 .findStudio(movie.getStudio())
                 .orElseThrow(
-                    () -> new IllegalStateException("Studio does not exist: " + movie.getStudio().getName())
+                    () -> new IllegalStateException("Studio does not exist: " + movie.getStudio())
                 );
 
             movie.setStudio(studio);
 
-            final ArrayList<Actor> actors = new ArrayList<>();
-
-            for (Actor actor : movie.getActors()) {
-                final Actor actorEntity = actorService
-                    .findActor(actor)
-                    .orElseThrow(
-                        () -> new IllegalStateException("Actor does not exist: " + actor.getFullName())
-                    );
-                actors.add(actorEntity);
-            }
+            final List<Actor> actors = movie.getActors()
+                .stream()
+                .map(actor -> actorService.findActor(actor)
+                    .orElseThrow(() -> new IllegalStateException("Actor does not exist: " + actor)))
+                .collect(Collectors.toList());
 
             movie.setActors(actors);
 

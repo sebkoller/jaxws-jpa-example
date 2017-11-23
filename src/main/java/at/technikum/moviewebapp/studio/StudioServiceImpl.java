@@ -11,14 +11,18 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public Optional<Studio> findStudio(Studio studio) {
+        return findStudio(studio.getName(), studio.getCountryCode(), studio.getPostCode());
+    }
 
+    @Override
+    public Optional<Studio> findStudio(String name, String countryCode, String postCode) {
         return em.createQuery("select s from Studio s " +
             "where s.name = :name " +
             "and s.countryCode = :countryCode " +
             "and s.postCode = :postCode", Studio.class)
-            .setParameter("name", studio.getName())
-            .setParameter("countryCode", studio.getCountryCode())
-            .setParameter("postCode", studio.getPostCode())
+            .setParameter("name", name)
+            .setParameter("countryCode", countryCode)
+            .setParameter("postCode", postCode)
             .getResultList()
             .stream()
             .findFirst();
